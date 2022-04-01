@@ -1,0 +1,59 @@
+nest g controller cats
+nest g cl cats/dto/create-cat.dto --no-spec
+nest g s cats
+nest g interface cats/interfaces/cat
+nest g module cats
+nest g middleware ./src/common/middleware/login
+nest g pipe common/pipes/parse-int
+---------------------------------
+controller: @Controller
+    router
+        Get, Post, ...
+        Res, Req, Params, Query, Body
+Provider: @Injectabel
+    Services, repositories, Factories, Helper,...
+    registration: (Provider - Module file)
+    DI - Dependence Injection
+        D: Services or Objects need by class
+        DI: design pattern - class requests from external resources rather than creating them
+        constructor(private name: <Name Class>)
+        Scopes:
+            - Global: single ton
+            - request-scoped:
+        Custom providers: IoC (More in Below)
+        Optional providers: @Optional() @Inject('HTTP_OPTIONS') 
+        registration:  (Provider - Module file)
+Modules: @Module
+    provide metadata use of to organize the application
+    providers: injector(the providers)
+    controllers: the set of controllers
+    imports: imported modules
+    exports: the subset of providers that are provided by this module
+    Module re-exporting: A: import B -> A: exports B -> C import A -> C can use provide of A and B
+    @Global(): use provide without import
+    dynamic modules: **********
+Middleware:
+    Dependency injection
+    configure() method of the module class
+    NestModule - configure - consumer(path + method)
+    simpler -> functional middleware
+Exception filters:
+    throw new HttpException('Forbidden', HttpStatus.FORBIDDEN); overriding json
+    Custom exceptions: extends HttpException 
+    Built-in HTTP exceptions: BadRequestException, UnauthorizedException, ....
+    Exception filters:
+        @Catch(HttpException)
+        exception: HttpException, host: ArgumentsHost
+        method-scoped, controller-scoped, or global-scoped.
+        @UseFilters(HttpExceptionFilter) decorator before method, controller
+        useGlobalFilters main.ts
+        providers: {
+                        provide: APP_FILTER,
+                        useClass: HttpExceptionFilter,
+                    },
+Pipes:
+    transformation vs validation
+    ValidationPipe/ParseIntPipe/ParseFloatPipe...
+    Binding pipes: @Param('id', ParseIntPipe)
+    Custom pipes
+    Schema based validation(validation pipes + class-transformer => dto)
