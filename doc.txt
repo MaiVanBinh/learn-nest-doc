@@ -57,3 +57,8 @@ Pipes:
     Binding pipes: @Param('id', ParseIntPipe)
     Custom pipes
     Schema based validation(validation pipes + class-transformer => dto)
+Guards:
+    Injectable + CanActivate 
+    determine handled by the route handler or not
+    Guards are executed after each middleware, but before any interceptor or pipe.
+    canActivate use ExecutionContext
